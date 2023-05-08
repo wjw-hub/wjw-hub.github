@@ -227,9 +227,14 @@
 <p>“import matplotlib.pyplot as plt\n”,<br>  “import numpy as np\n”,<br>  “import os”</p>
 </blockquote>
 </li>
-<li><p>“然后，我们要先了解相应的概念。\n”,<br>  “    表面张力，即引起液体表面收缩的单位长度上的力，在温度，压强和组成不变的情况下，\n”,<br>  “σ&#x3D;（∂G&#x2F;∂As）T,p,nb, 其中G为表面功，As为增大的表面积。\n”,<br>  “    Δpmax，为做实验时气泡所能承受的最大压力，实验时仪器可直接测出。当有一种已知表面张力的液体时，我们可用公式求得另一种液体的表面张力。\n”,<br>  “σ1&#x3D;（σ2&#x2F;Δpmax2）<em>Δpmax1\n”,<br>  “    表面吸附量F，即单位面积的表面层所含溶质的量比同量溶剂在本体溶液中所含溶质的物质的量的超出值。\n”,<br>  “F&#x3D;-a&#x2F;(R</em>T)<em>(dσ&#x2F;da)T\n”,<br>  “a为溶液活度，对于理想液态体系或稀溶液，可以用溶液浓度c代替活度a，此时F&#x3D;-c&#x2F;(R</em>T)*(dσ&#x2F;dc)T，R为常数。\n”,<br>  “\n”,</p>
+<li><p>然后，我们要先了解相应的概念。</p>
+<p>表面张力，即引起液体表面收缩的单位长度上的力，在温度，压强和组成不变的情况下，<br>“σ&#x3D;（∂G&#x2F;∂As）T,p,nb, 其中G为表面功，As为增大的表面积。”</p>
 </li>
-<li><p>“我们这次实验所需的实验试剂是表面活性物质正丁醇，我们需要输入一些已知常数。T&#x3D;18℃时，σwater&#x3D;73.05E-3，R&#x3D;8.314。我们已知水的表面张力，测得水的Δpmax后，并需要配置一系列不同浓度的溶液，测得正丁醇每个浓度下的Δpmax，进而根据公式算得每个浓度下正丁醇的表面张力。\n”</p>
+<li><p>Δpmax，为做实验时气泡所能承受的最大压力，实验时仪器可直接测出。当有一种已知表面张力的液体时，我们可用公式求得另一种液体的表面张力。”σ1&#x3D;（σ2&#x2F;Δpmax2）<em>Δpmax1”<br>“σ1&#x3D;（σ2&#x2F;Δpmax2）</em>Δpmax1”</p>
+</li>
+<li><p>表面吸附量F，即单位面积的表面层所含溶质的量比同量溶剂在本体溶液中所含溶质的物质的量的超出值。<br>“F&#x3D;-a&#x2F;(R<em>T)</em>(dσ&#x2F;da)T”,<br>a为溶液活度，对于理想液态体系或稀溶液，可以用溶液浓度c代替活度a，此时F&#x3D;-c&#x2F;(R<em>T)</em>(dσ&#x2F;dc)T，R为常数。</p>
+</li>
+<li><p>我们这次实验所需的实验试剂是表面活性物质正丁醇，我们需要输入一些已知常数。T&#x3D;18℃时，σwater&#x3D;73.05E-3，R&#x3D;8.314。我们已知水的表面张力，测得水的Δpmax后，并需要配置一系列不同浓度的溶液，测得正丁醇每个浓度下的Δpmax，进而根据公式算得每个浓度下正丁醇的表面张力。</p>
 <blockquote>
 <p>“Δpmax_water&#x3D;float(input(“请输入水的最大压差：”))<br>T&#x3D;291.15<br>σ_water&#x3D;73.05E-3<br>R&#x3D;8.314<br>Δpmax_butanol&#x3D;[float(i) for i in input(“请输入正丁醇的最大压差，用‘，’分隔：”).split(‘,’)]<br>for i in range(len(Δpmax_butanol)):<br>  σ_butanol&#x3D;(σ_water&#x2F;Δpmax_water)*Δpmax_butanol[i]”</p>
 </blockquote>
@@ -247,19 +252,22 @@
 </ul>
 <p>#使用polyfit方法进行拟合，选择二次方程式<br>p1 &#x3D; np.poly1d(z1)</p>
 <ul>
-<li><strong>打印拟合多项式</strong><br>print(p1)</li>
-<li><strong>求对应的各项拟合函数值</strong><br>fx &#x3D; p1(x)</li>
+<li><strong>打印拟合多项式</strong><blockquote>
+<p>print(p1)</p>
+</blockquote>
+</li>
+<li><strong>求对应的各项拟合函数值</strong><blockquote>
+<p>fx &#x3D; p1(x)</p>
+</blockquote>
+</li>
 <li><strong>绘制图像</strong><blockquote>
-<p>“plot1 &#x3D; plt.plot(x, y, ‘*’)<br>plot2 &#x3D; plt.plot(x, fx, ‘r’)<br>plt.xlabel(‘c’)<br>plt.ylabel(‘σ_butanol’)<br>ax &#x3D; plt.gca()<br>ax.set_xlim(0,0.25)<br>ax.set_ylim(0.03,0.08)<br>plt.show()”</p>
+<p>plot1 &#x3D; plt.plot(x, y, ‘*’)<br>plot2 &#x3D; plt.plot(x, fx, ‘r’)<br>plt.xlabel(‘c’)<br>plt.ylabel(‘σ_butanol’)<br>ax &#x3D; plt.gca()<br>ax.set_xlim(0,0.25)<br>ax.set_ylim(0.03,0.08)<br>plt.show()”</p>
 </blockquote>
 </li>
 <li>“根据我们汇出来的图像，我们求得了该图像的函数方程式，即y&#x3D;0.2704 x^2 - 0.1633 x + 0.06937,根据这个公式，我们可以在每个浓度下对函数求导，进而得到所配置溶液浓度所对应的dσ&#x2F;dc，从而根据公式作出表面吸附量与浓度的图像关系。”<blockquote>
-<p>“def  y(x):<br>  return 0.2704 *x *<em>2- 0.1633</em> x + 0.06937</p>
+<p>def  y(x):<br>  return 0.2704 *x *<em>2- 0.1633</em> x + 0.06937</p>
 </blockquote>
-</li>
-</ul>
-<p>def  derivative(x0,deltaX):#x0为所求点横坐标,deltaX为偏移量<br>      return (y(x0+deltaX)-y(x0))&#x2F;deltaX<br>c&#x3D;[0.02,0.04,0.06,0.08,0.10,0.12,0.16,0.20,0.24]<br>for i in c:<br>    der&#x3D;derivative(i,0.1*<em>10)<br>    F&#x3D;-i&#x2F;(R</em>T)*der<br>    print(F)<br>    plt.xlabel(‘c’)<br>    plt.ylabel(‘F’)<br>    plt.scatter(i,F,color&#x3D;”r”,linewidth&#x3D;0.1,linestyle&#x3D;”-“)<br>os.system(“pause”)”</p>
-<ul>
+def  derivative(x0,deltaX):#x0为所求点横坐标,deltaX为偏移量<br>return (y(x0+deltaX)-y(x0))&#x2F;deltaX<br>c&#x3D;[0.02,0.04,0.06,0.08,0.10,0.12,0.16,0.20,0.24]<br>for i in c:<br>  der&#x3D;derivative(i,0.1*<em>10)<br>  F&#x3D;-i&#x2F;(R</em>T)*der<br>  print(F)<br>  plt.xlabel(‘c’)<br>  plt.ylabel(‘F’)<br>  plt.scatter(i,F,color&#x3D;”r”,linewidth&#x3D;0.1,linestyle&#x3D;”-“)<br>os.system(“pause”)”</li>
 <li>“我们对待表面吸附量和浓度的关系图像依然使用polyfit方法进行拟合，选择二次方程式。”<blockquote>
 <p>“x&#x3D; np.array([0.02,0.04,0.06,0.08,0.10,0.12,0.16,0.20,0.24])<br>y&#x3D; np.array([1.2598749771352178e-06,2.341020098800261e-06,3.2434336450496413e-06,3.9671138959378685e-06,4.512064864671086e-06,4.878284831303801e-06,5.074531758267732e-06,4.555854676829662e-06,3.3222535869895894e-06])  # 将（x，y）坐标点输入<br>z1 &#x3D; np.polyfit(x,y,2)</p>
 </blockquote>
@@ -267,9 +275,18 @@
 </ul>
 <p>#使用polyfit方法进行拟合，选择二次方程式<br>p1 &#x3D; np.poly1d(z1)</p>
 <ul>
-<li><strong>打印拟合多项式</strong><br>print(p1)</li>
-<li><strong>求对应的各项拟合函数值</strong><br>fx &#x3D; p1(x)</li>
-<li><strong>绘制图像</strong><br>plot1 &#x3D; plt.plot(x, y, ‘*’)<br>plot2 &#x3D; plt.plot(x, fx, ‘r’)<br>plt.xlabel(‘c’)<br>plt.ylabel(‘F’)<br>ax &#x3D; plt.gca()<br>ax.set_xlim(0,0.25)<br>plt.show()”</li>
+<li><strong>打印拟合多项式</strong><blockquote>
+<p>print(p1)</p>
+</blockquote>
+</li>
+<li><strong>求对应的各项拟合函数值</strong><blockquote>
+<p>fx &#x3D; p1(x)</p>
+</blockquote>
+</li>
+<li><strong>绘制图像</strong><blockquote>
+<p>plot1 &#x3D; plt.plot(x, y, ‘*’)<br>plot2 &#x3D; plt.plot(x, fx, ‘r’)<br>plt.xlabel(‘c’)<br>plt.ylabel(‘F’)<br>ax &#x3D; plt.gca()<br>ax.set_xlim(0,0.25)<br>plt.show()”</p>
+</blockquote>
+</li>
 </ul>
 
         </div>

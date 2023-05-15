@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+<title>Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">用Python学点化学</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">用Python学点化学</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title"></h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">John Doe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">May 15, 2023&nbsp;&nbsp;13:50:00</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>在这本篇中，我们将学习蔗糖转化速率常数的测定。对于此篇，我们需要用到numpy、matplotlib.pyplot和matplotlib软件包。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> rcParams</span><br><span class="line"><span class="keyword">from</span> scipy.interpolate <span class="keyword">import</span> make_interp_spline</span><br><span class="line"><span class="keyword">from</span> scipy.optimize <span class="keyword">import</span> curve_fit</span><br><span class="line">np.set_printoptions(suppress=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">from</span> sympy <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line">config = &#123;</span><br><span class="line">    <span class="string">&quot;font.family&quot;</span>:<span class="string">&#x27;serif&#x27;</span>,             <span class="comment">#设置字体家族</span></span><br><span class="line">    <span class="string">&quot;font.size&quot;</span>: <span class="number">12</span>,                   <span class="comment">#设置中文字体为宋体12号，英文字体为Times New Roman</span></span><br><span class="line">    <span class="string">&quot;mathtext.fontset&quot;</span>:<span class="string">&#x27;stix&#x27;</span>,</span><br><span class="line">    <span class="string">&quot;font.serif&quot;</span>: [<span class="string">&#x27;Times New Roman&#x27;</span>],</span><br><span class="line">&#125;</span><br><span class="line">rcParams.update(config)</span><br></pre></td></tr></table></figure>
+
+<p>定义一个computeCorrelation(X, Y)函数，计算线性回归中的相关性以及R$^{2}$，以此来判断线性拟合的相关程度。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">computeCorrelation</span>(<span class="params">X, Y</span>):</span><br><span class="line">    xBar = np.mean(X)</span><br><span class="line">    yBar = np.mean(Y)</span><br><span class="line">    SSR = <span class="number">0</span></span><br><span class="line">    varX = <span class="number">0</span></span><br><span class="line">    varY = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(X)):</span><br><span class="line">        diffXXBar = X[i] - xBar</span><br><span class="line">        diffYYBar = Y[i] - yBar</span><br><span class="line">        SSR += (diffXXBar * diffYYBar)</span><br><span class="line">        varX += diffXXBar ** <span class="number">2</span></span><br><span class="line">        varY += diffYYBar ** <span class="number">2</span></span><br><span class="line"></span><br><span class="line">    SST = math.sqrt(varX * varY)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;r：&quot;</span>, SSR / SST, <span class="string">&quot;r-squared：&quot;</span>, (SSR / SST) ** <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(matplotlib.matplotlib_fname())</span><br></pre></td></tr></table></figure>
+
+<pre><code>c:\users\华硕\appdata\local\programs\python\python38\lib\site-packages\matplotlib\mpl-data\matplotlibrc
+</code></pre>
+<p>蔗糖水溶液在有氢离子存在时发生水解反应：</p>
+<p>$$C_{12}H_{22}O_{11}(蔗糖) + H_{2}O  \rightarrow C_{6}H_{12}O_{6}(葡萄糖) + C_{6}H_{12}O_{6}(果糖)$$</p>
+<p>其速率方程为：</p>
+<p>$$-\frac{dc_{C_{12} H_{22} O_{11}}}{dt} &#x3D; k_{2}c_{C_{12} H_{22} O_{11}}c_{H_{2}O}$$</p>
+<p>当氢离子浓度一定，蔗糖溶液较稀时，因为作为溶剂的水的浓度可以认为基本不变，可以合并进常数项，这时蔗糖水解为假一级反应，其速率方程可写为:</p>
+<p>$$-\frac{dc_{C_{12} H_{22} O_{11}}}{dt} &#x3D; kc_{C_{12} H_{22} O_{11}}$$</p>
+<p>令c$<em>{0}$为蔗糖开始的浓度，c$</em>{t}$为反应t时刻的蔗糖浓度，将上式积分可得到:</p>
+<p>$$ln\frac{c_{0}}{c_{t}} &#x3D; kt$$</p>
+<p>只要Inc$<em>{t}$对t作图得到直线关系，就可证明蔗糖稀溶液的水解为一级反应，并可从直线的斜率求得速率常数k。<br>当反应物浓度由c$</em>{0}$降至c&#x3D;$-\frac{1}{2}$c$<em>{0}$时，所用时间称为反应的半衰期，用t$</em>{1&#x2F;2}$表示: </p>
+<p>$$t_{1&#x2F;2} &#x3D; \frac{ln2}{k}$$</p>
+<p>随着反应的进行，蔗糖的浓度逐渐降低至水解完全，即c$_{∞}$&#x3D;0，葡萄糖和果糖的浓度逐渐增大，且果糖的左旋程度远大于葡萄糖的右旋程度，所以在水解过程中，溶液的旋光方向将逐渐由右旋变为左旋。<br>因为：</p>
+<p>$$ɑ &#x3D; ɑ_{蔗糖} + ɑ_{葡萄糖} + ɑ_{果糖}$$</p>
+<p>设ɑ$<em>{0}$为t&#x3D;0时溶液的旋光度，ɑ$</em>{t}$为时间t时混合溶液的旋光度,ɑ$_{∞}$为水解完全时溶液的旋光度，则：</p>
+<p>$$ɑ_{t} &#x3D; K_{蔗糖}(c_{0} + K_{葡萄糖}(c_{0}-c_{t}) + K_{蔗糖}(c_{0}-c_{t})$$</p>
+<p>$$ɑ_{0} &#x3D; K_{蔗糖}c_{0}$$</p>
+<p>$$ɑ_{0} &#x3D; K_{葡萄糖}c_{0} + K_{果糖}c_{0}$$</p>
+<p>联立上面三式，消去K，得：</p>
+<p>$$\frac{c_{0}}{c_{t}} &#x3D; \frac{(ɑ_{0}-ɑ_{∞})}{(ɑ_{t}-ɑ_{∞})}$$</p>
+<p>将上式代入即得：</p>
+<p>$$k &#x3D; \frac{1}{t}In(\frac{ɑ_{0}-ɑ_{∞}}{ɑ_{t}-ɑ_{∞}})$$</p>
+<p>$$In(ɑ_{t}-ɑ_{∞}) &#x3D; -kt + ln(ɑ_{0}-ɑ_{∞})$$</p>
+<p>In(ɑ$<em>{t}$-ɑ$</em>{∞}$)对t作图得一直线，由直线的斜率即可算出反应速率常数k。</p>
+<p>输入实验数据，并处理实验数据。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">t = [<span class="number">5</span>,<span class="number">10</span>,<span class="number">15</span>,<span class="number">20</span>,<span class="number">30</span>,<span class="number">40</span>,<span class="number">50</span>,<span class="number">60</span>]</span><br><span class="line"></span><br><span class="line">a = [<span class="number">11.20</span>,<span class="number">10.50</span>,<span class="number">9.85</span>,<span class="number">9.20</span>,<span class="number">8.10</span>,<span class="number">6.95</span>,<span class="number">6.05</span>,<span class="number">5.15</span>]</span><br><span class="line">a = np.array(a)</span><br><span class="line">a = a + <span class="number">2.85</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;a修正&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(a)</span><br><span class="line"></span><br><span class="line">ai = [-<span class="number">4.60</span>]</span><br><span class="line">ai = np.array(ai)</span><br><span class="line">a1 = a - ai</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;at-ainfty&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(a1)</span><br><span class="line">a2 = np.log(a1)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;ln&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(a2)</span><br><span class="line"></span><br><span class="line">A = np.polyfit(t,a2,<span class="number">1</span>)</span><br><span class="line">B = np.poly1d(A)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;图像的拟合函数：&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(B)</span><br><span class="line">D = B.deriv()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;求导之后得到斜率：&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(D)</span><br><span class="line">computeCorrelation(t, a2)</span><br></pre></td></tr></table></figure>
+
+<pre><code>a修正
+[14.05 13.35 12.7  12.05 10.95  9.8   8.9   8.  ]
+at-a\infty
+[18.65 17.95 17.3  16.65 15.55 14.4  13.5  12.6 ]
+ln
+[2.92584615 2.88759011 2.8507065  2.81241022 2.74406064 2.66722821
+ 2.60268969 2.53369681]
+图像的拟合函数：
+ 
+-0.007129 x + 2.958
+求导之后得到斜率：
+ 
+-0.007129
+r： -0.999760168751737 r-squared： 0.9995203950225017
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">runplt</span>(<span class="params">size=<span class="literal">None</span></span>):</span><br><span class="line">    plt.figure(figsize=(<span class="number">12</span>,<span class="number">7.5</span>))</span><br><span class="line">    plt.title(<span class="string">r&#x27;The Figure of $\ln&#123;(\alpha_&#123;t&#125; - \alpha_&#123;\infty&#125;)&#125;-t$&#x27;</span>)</span><br><span class="line">    plt.xlabel(<span class="string">r&#x27;$t \  / \ \rm&#123;min&#125;$&#x27;</span>)</span><br><span class="line">    plt.ylabel(<span class="string">r&#x27;$\ln&#123;(\alpha_&#123;t&#125; - \alpha_&#123;\infty&#125;)&#125;$&#x27;</span>)</span><br><span class="line">    <span class="comment"># plt.axis([0, 4.5,0.03, 0.07])</span></span><br><span class="line">    <span class="comment"># plt.axis([])</span></span><br><span class="line">    <span class="keyword">return</span> plt</span><br><span class="line"></span><br><span class="line">plt=runplt()</span><br><span class="line">plt.grid(zorder=<span class="number">0</span>)</span><br><span class="line">plt.scatter(t,a2,c=<span class="string">&#x27;purple&#x27;</span>,marker=<span class="string">&#x27;o&#x27;</span>,label=<span class="string">&#x27;$Original \ Datas$&#x27;</span>,zorder=<span class="number">3</span>)</span><br><span class="line">plt.plot(np.arange(<span class="number">0</span>,<span class="number">95</span>,<span class="number">1</span>),B(np.arange(<span class="number">0</span>,<span class="number">95</span>,<span class="number">1</span>)),ls=<span class="string">&#x27;--&#x27;</span>,c=<span class="string">&#x27;orange&#x27;</span>,label=<span class="string">r&#x27;$After \ linear \ fitting:\ln&#123;(\alpha_&#123;t&#125; - \alpha_&#123;\infty&#125;)&#125; =-0.01583t + 2.918\quad R^&#123;2&#125; = 0.993$&#x27;</span>,zorder=<span class="number">2</span>)</span><br><span class="line"><span class="keyword">for</span> X, y <span class="keyword">in</span> <span class="built_in">zip</span>(t, a2):</span><br><span class="line">    plt.text(X+<span class="number">1</span>, y, (X,np.around(y,<span class="number">2</span>)),ha=<span class="string">&#x27;left&#x27;</span>, va=<span class="string">&#x27;bottom&#x27;</span>, fontsize=<span class="number">6</span>)</span><br><span class="line">plt.legend(loc=<span class="string">&#x27;upper right&#x27;</span>)</span><br><span class="line">plt.savefig(<span class="string">&#x27;ffigg.pdf&#x27;</span>,bbox_inches=<span class="string">&#x27;tight&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/output_7_0.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>John Doe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2023/05/15/%E8%94%97%E7%B3%96%E8%BD%AC%E5%8C%96%E9%80%9F%E7%8E%87%E5%B8%B8%E6%95%B0%E7%9A%84%E6%B5%8B%E5%AE%9A/">http://example.com/2023/05/15/%E8%94%97%E7%B3%96%E8%BD%AC%E5%8C%96%E9%80%9F%E7%8E%87%E5%B8%B8%E6%95%B0%E7%9A%84%E6%B5%8B%E5%AE%9A/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2023/05/06/page-1/">page</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© John Doe | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
